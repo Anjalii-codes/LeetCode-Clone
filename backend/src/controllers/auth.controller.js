@@ -7,6 +7,7 @@ export const register = async (req, res) => {
     if(!name || !email || !password) {
         return res.status(400).json(
             {
+                
                 msg: "Please enter all fields"
             })
     }
@@ -44,6 +45,7 @@ export const register = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
         res.status(201).json({ 
+            success : true,
             message: "User created successfully",
             user : {
                 id: newUser.id,
@@ -56,6 +58,7 @@ export const register = async (req, res) => {
     } catch (error) {
         console.log(error, "error in creating user")
         res.status(500).json({
+            success: false,
             msg: "Something went wrong"
         })
         
@@ -100,6 +103,7 @@ export const login = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
         res.status(200).json({ 
+            success : true,
             message: "User logged in successfully",
             user : {
                 id: user.id,
@@ -112,9 +116,27 @@ export const login = async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(500).json({
+            success: false,
             msg: "Something went wrong"
 
         })
         
     }
+};
+export const logout = async (req, res) => {
+    try {
+        res.cookie("jwt", "");
+        res.status(200).json({
+            success: true,
+            message: "User logged out successfully"
+        });
+    
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            msg: "error logging out"
+        });
+
+        
+    };
 };
