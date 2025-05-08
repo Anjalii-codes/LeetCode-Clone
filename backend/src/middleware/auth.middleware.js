@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { db } from "../libs/db.js";  
 
 export const authMiddleware = async (req, res, next) => {
     try {
@@ -37,7 +38,8 @@ export const authMiddleware = async (req, res, next) => {
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: "Error authenticating user"
+            message: "Error authenticating user",
+            error :error.message
         })
     }
 }

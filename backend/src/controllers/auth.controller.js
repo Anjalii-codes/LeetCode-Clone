@@ -141,5 +141,18 @@ export const logout = async (req, res) => {
     };
 };
 export const check = async (req, res) => {
-    
+    try {
+        return res.status(200).json({
+            success: true,
+            message: "User authenticated in successfully",
+            user : req.user
+            
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "error checking user",
+            error : error.message
+        })
+    }
 }
