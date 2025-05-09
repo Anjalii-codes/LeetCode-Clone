@@ -42,4 +42,33 @@ export const authMiddleware = async (req, res, next) => {
             error :error.message
         })
     }
+};
+export const checkAdmin = async(req,res,next)=>{
+    try {
+        const userId = req.user.id;
+        const user = await db.user.findUnique({
+            where: {
+                id: userId
+            },
+            select: {
+               
+                role: true,
+            }
+        })
+        if(!user || user.role!=="ADMIN"){
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized - User is not an admin"
+            })
+        }
+
+        next();
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error authenticating user",
+            error :error.message
+        })
+        
+    }
 }
