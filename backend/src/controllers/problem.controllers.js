@@ -18,6 +18,16 @@ export const createproblem = async (req, res) => {
                 error: ` language ${language} is not supported`,
             })
         }
+        //
+        const submissions = testcases.map(({ input, output }) =>({
+            source_code : solutionCode,
+            language_id: languageId,
+            stdin: input,
+            expected_output: output
+            
+        }))
+        const submissionResults = await submitBatch(submissions)
+        const tokens = submissionResults.map((res)=>res.token)
 
     }
 
