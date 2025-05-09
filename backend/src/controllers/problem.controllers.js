@@ -1,3 +1,4 @@
+
 export const createproblem = async (req, res) => {
     // get data 
     const { title, description, difficulty, tags, examples, constraints, testcases, codeSnippets, referenceSolutions } = req.body
@@ -27,7 +28,24 @@ export const createproblem = async (req, res) => {
             
         }))
         const submissionResults = await submitBatch(submissions)
-        const tokens = submissionResults.map((res)=>res.token)
+        const tokens = submissionResults.map((res) => res.token)
+        const results = await pollBatchResults(tokens);
+        for (let i = 0; i < results.length; i++){
+            const res = results[i]
+            if (results.status.id !== 3) {
+                return res.status(400).json({
+                    error : `Testcase ${i+1} failed for language ${language}`
+                })
+            }
+
+
+        }
+        // save problem in db
+        const newProblem = await db.problem.create({
+            data: {
+                    title, description, difficulty, tags, examples, constraints, testcases, codeSnippets, referenceSolutions            }
+        })
+        return res.status(201).json(newProblem)
 
     }
 
