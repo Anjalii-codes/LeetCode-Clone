@@ -10,16 +10,15 @@ export const createproblem = async (req, res) => {
         })
     }
     // loop through each ref sol
-    for(const [language,solution] of Object.entries(referenceSolutions)){
+    for(const [language,solutionCode] of Object.entries(referenceSolutions)){
         // get lang id from judge 0
         const languageId = getjudge0LanguageId(language)
         if (!languageId) {
             return res.status(400).json({
-                success: false,
-                message: "language not supported",
-                error:error.message
+                error: ` language ${language} is not supported`,
             })
         }
+
     }
 
 };
